@@ -10,8 +10,5 @@ For implementing component, please follow the example in /component/screen/user/
 		1). You can use React-Native-Paper: (https://callstack.github.io/react-native-paper/)
 4. <b>CSS style</b>
 
-<b>Workflow:</b>
-1. Pick the screen you want to work on
-2. create your own branch
-3. commit and push your work to repo
-4. I will review your code and do merge
+<b>Workflow:</b><br>
+https://www.youtube.com/watch?v=rgbCcBNZcdQ

@@ -11,4 +11,4 @@ For implementing component, please follow the example in /component/screen/user/
 4. <b>CSS style</b>
 
 <b>Workflow:</b><br>
-https://www.youtube.com/watch?v=rgbCcBNZcdQ
+	https://www.youtube.com/watch?v=rgbCcBNZcdQ

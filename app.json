@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "professor-rating-app",
+    "name": "no.2",
     "description": "No description",
-    "slug": "snack-b6d52c69-321e-46cb-a3d0-191cba22d0ed",
+    "slug": "snack-7d899d61-ad09-49f7-adba-97d71ae799b9",
     "privacy": "unlisted",
     "sdkVersion": "36.0.0",
     "version": "1.0.0",
@@ -23,6 +23,10 @@
     },
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.nocompany.ProfssorApp",
+      "versionCode": 1
     }
   }
 }

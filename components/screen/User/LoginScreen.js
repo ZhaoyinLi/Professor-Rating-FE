@@ -5,72 +5,78 @@ import { Button, TextInput } from 'react-native-paper';
 export default class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      email: 'badger@wisc.edu',
+      password: '123456',
+      url: 'http://172.220.7.76:8080',
+      token: '',
+    };
   }
 
   static navigationOptions = {
     title: 'Login',
   };
 
-  // react lifecycle
-  // https://reactjs.org/docs/state-and-lifecycle.html
-  componentDidMount() {
-    // setup data
-  }
+  componentDidMount() {}
 
-  // 1. main function logic here:
   login() {
-    // how to send request:
-    fetch('url', {
-      method: 'POST', // get or post
-      // header params
+    fetch(this.state.url + '/v1/auth/login', {
+      method: 'POST',
+      mode: 'cors',
       headers: {
-        Accept: '*/*',
         'Content-Type': 'application/json',
-        'x-access-token': 'token',
-        Connection: 'keep-alive',
-        'cache-control': 'no-cache',
+        Accept: '*/*',
       },
-      body: JSON.stringify(
-        // data send to server
-        {
-          username: 'blah blah',
-          password: 'blah bah blah',
-        }
-      ),
+      body: JSON.stringify({
+        email: this.state.email,
+        passwd: this.state.password,
+      }),
     })
       .then(response => {
-        // convert response to JSON
         return response.json();
       })
       .then(result => {
-        // deal with result
+        if (result.message === 'success') {
+          const { navigate } = this.props.navigation;
+          navigate('Search', {
+            url: this.state.url,
+            email: this.state.email,
+            // and more infor.....
+          });
+        } else {
+          alert('Invalid passwrod or username');
+        }
+      })
+      .catch(err => {
+        alert(err);
       });
-
-    // how to go to another page
-    const { navigate } = this.props.navigation;
-    navigate(
-      // page name, names are all in APP.js
-      'Search',
-      // data pass to destination screen
-      {
-        data: 'blah blah blah....',
-      }
-    );
   }
 
   register() {
-    alert('???');
+    const { navigate } = this.props.navigation;
+    navigate('SignUp', {
+      url: this.state.url,
+    });
   }
 
   render() {
-    // 2. React Components here:
-    // // https://callstack.github.io/react-native-paper/
+    const { email, password } = this.state;
     return (
       <View style={styles.container}>
         <View style={styles.input_container}>
-          <TextInput style={styles.inputs} label="Username" />
-          <TextInput style={styles.inputs} label="Password" />
+          <TextInput
+            style={styles.inputs}
+            label="Email"
+            value={email}
+            onChangeText={u => this.setState({ email: u })}
+          />
+          <TextInput
+            style={styles.inputs}
+            label="Password"
+            value={password}
+            onChangeText={p => this.setState({ password: p })}
+            secureTextEntry={true}
+          />
         </View>
         <View style={styles.btn_container}>
           <Button
@@ -95,24 +101,21 @@ export default class LoginScreen extends React.Component {
   }
 }
 
-// 3. CSS style here:
 const styles = StyleSheet.create({
-  container: {
-    height: '100%',
-  },
   input_container: {
-    padding: 40,
-    alignItems: 'center',
+    marginTop: '5%',
   },
   inputs: {
-    margin: 8,
+    width: '90%',
+    marginLeft: '5%',
+    marginTop: '3%',
   },
   btn_container: {
-    width: '100%',
-    alignItems: 'center',
+    marginTop: '5%',
   },
   btn: {
-    width: 120,
-    margin: 5,
+    marginTop: '3%',
+    width: '80%',
+    marginLeft: '10%',
   },
 });

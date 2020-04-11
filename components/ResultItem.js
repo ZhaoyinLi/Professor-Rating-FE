@@ -21,10 +21,12 @@ class ResultItem extends React.Component {
   };
 
   toComment() {
-    const { id, url, navigate } = this.props;
+    const { course_id, url, navigate, token, comments} = this.props;
     navigate('Comment', {
-      id: id,
+      course_id: course_id,
       url: url,
+      token: token,
+      comments: comments,
     });
   }
 

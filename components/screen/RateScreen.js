@@ -64,8 +64,10 @@ class RateScreen extends React.Component {
           
           //alert('ciao: ' + JSON.stringify(result));
           
-          this.props.navigation.state.params.refresh(id);
-          alert('going back to comment scr'); // didn't appear
+          // this.props.navigation.state.params.refresh(id);
+          // alert('going back to comment scr'); // didn't appear
+          // this.props.navigation.goBack();
+          this.props.navigation.state.params.onNavigateBack(id); 
           this.props.navigation.goBack();
         } else {
           alert('commentPOST failed, result.sucess: '+result.success);
@@ -111,7 +113,7 @@ class RateScreen extends React.Component {
           backgroundColor: '#fff',
         }}>
         <View style={{ flexDirection: 'row', marginHorizontal: 10 }}>
-          <Text style={{ fontWeight: 'bold', color: '#666' }}>cs506</Text>
+      <Text style={{ fontWeight: 'bold', color: '#666' }}>{ course_name }</Text>
           <View style={{ position: 'absolute', right: -5 }}>
             <Rating
               ratingCount={5}
@@ -122,19 +124,20 @@ class RateScreen extends React.Component {
             />
           </View>
         </View>
-        <View style={{ alignItems: 'center' }}>
+        <View style={{ 
+          // alignItems: 'center',
+          //
+          borderRadius: 4,
+          backgroundColor: '#fafafa',
+          // borderWidth: '1', // this caused Android crashes
+          // borderColor: '#777',
+          padding: 10,
+          marginTop: 15,
+          marginBottom: 10,
+          width: '100%',
+          // height: Math.max(40, this.state.height),
+        }}>
           <TextInput
-            style={{
-              borderRadius: 4,
-              backgroundColor: '#fafafa',
-              borderWidth: '1',
-              borderColor: '#777',
-              padding: 10,
-              marginTop: 15,
-              marginBottom: 10,
-              width: '100%',
-              height: Math.max(40, this.state.height),
-            }}
             placeholder="Type here"
             multiline={true}
             onChangeText={text => this.setState({ comment: text })}

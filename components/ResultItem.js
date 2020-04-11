@@ -20,11 +20,16 @@ class ResultItem extends React.Component {
   };
 
   toComment() {
-    const { course_id, url, navigate } = this.props;
+    const { course_id, url, navigate, token, comments} = this.props;
+    //alert('result item has token: '+token);
+    //alert('course_id: '+course_id);
     navigate('Comment', {
       course_id: course_id,
       url: url,
+      token: token,
+      comments: comments,
     });
+    alert('id: '+course_id);
   }
   render() {
     let btn = [];

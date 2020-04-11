@@ -8,6 +8,8 @@ export default class Comment extends React.Component {
   }
 
   render() {
+    //const { rate } = this.props; //
+    //alert('rating: '+rating);
     return (
       <View
         style={{
@@ -32,9 +34,12 @@ export default class Comment extends React.Component {
           </Text>
           <View style={{ position: 'absolute', right: -5 }}>
             <Rating
-              defaultRating={this.props.rating}
+              //defaultRating={this.props.rate} //?
+              startingValue={this.props.rate}
               ratingCount={5}
               imageSize={18}
+              readonly={true}
+              // rating={this.props.rate}
             />
           </View>
         </View>

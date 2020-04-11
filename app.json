@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "no.2",
+    "name": "laughing-cashew",
     "description": "No description",
-    "slug": "snack-7d899d61-ad09-49f7-adba-97d71ae799b9",
+    "slug": "snack-b5a8616f-81d7-4100-93c2-d5b3e949ea67",
     "privacy": "unlisted",
     "sdkVersion": "36.0.0",
     "version": "1.0.0",
@@ -23,10 +23,6 @@
     },
     "ios": {
       "supportsTablet": true
-    },
-    "android": {
-      "package": "com.nocompany.ProfssorApp",
-      "versionCode": 1
     }
   }
 }

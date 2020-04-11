@@ -36,12 +36,14 @@ export default class LoginScreen extends React.Component {
         return response.json();
       })
       .then(result => {
+        //alert('Login-result.data as token: '+result.data);//
         if (result.message === 'success') {
           const { navigate } = this.props.navigation;
           navigate('Search', {
             url: this.state.url,
             email: this.state.email,
             // and more infor.....
+            token: result.data, //<-new
           });
         } else {
           alert('Invalid passwrod or username');

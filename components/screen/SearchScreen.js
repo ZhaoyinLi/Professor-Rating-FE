@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, TextInput, StyleSheet, Image } from 'react-native';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { Searchbar, Button } from 'react-native-paper';
 
 class SearchScreen extends React.Component {

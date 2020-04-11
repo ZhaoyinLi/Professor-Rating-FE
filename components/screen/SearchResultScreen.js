@@ -19,7 +19,7 @@ class SearchResultScreen extends React.Component {
       search: '',
       token: '',
       email: '',
-      id:'',
+      id: '',
     };
   }
 
@@ -27,11 +27,11 @@ class SearchResultScreen extends React.Component {
     title: 'Search Result',
   };
 
-  
+
 
   componentDidMount() {
-    const { search, url,token, email, id} = this.props.navigation.state.params;
-    fetch(url + '/v1/terms/name/'+ search, {
+    const { search, url, token, email, id } = this.props.navigation.state.params;
+    fetch(url + '/v1/terms/name/' + search, {
       method: 'GET',
       mode: 'cors',
       headers: {
@@ -52,7 +52,7 @@ class SearchResultScreen extends React.Component {
             email: email,
             id: result.data.id,
           });
-        } 
+        }
         else {
           alert('Invalid Search');
         }
@@ -60,12 +60,11 @@ class SearchResultScreen extends React.Component {
       .catch(err => {
         alert(err);
       });
-    
-  }
-  
 
-saved() {
-    const { navigate,token,id } = this.props.navigation;
+  }
+
+  saved() {
+    const { navigate, token, id } = this.props.navigation;
     navigate('Saved', {
       url: this.state.url,
       courses: this.state.courses,
@@ -79,40 +78,40 @@ saved() {
   render() {
     return (
       <View>
-      <Button
-            mode="contained"
-            style={styles.btn} 
-            onPress={() => {
+        <Button
+          mode="contained"
+          style={styles.btn}
+          onPress={() => {
             this.saved();
-            }}>
-            Saved Page
+          }}>
+          Saved Page
           </Button>
-      <FlatList
-        data={this.state.courses}
-        renderItem={({ item }) => (
-          <ResultItem
-            title={item.name}
-            course_id={item.id}
-            description={item.description}
-            navigate={this.props.navigation.navigate}
-            token={this.state.token}
-            url={this.state.url}
-            email={this.state.email}
-            id={this.state.id}
-          />
-        )}
-        keyExtractor={item => item.id}
-      />
+        <FlatList
+          data={this.state.courses}
+          renderItem={({ item }) => (
+            <ResultItem
+              title={item.name}
+              course_id={item.id}
+              description={item.description}
+              navigate={this.props.navigation.navigate}
+              token={this.state.token}
+              url={this.state.url}
+              email={this.state.email}
+              id={this.state.id}
+            />
+          )}
+          keyExtractor={item => item.id}
+        />
       </View>
     );
   }
 }
 
- const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   btn: {
     width: 130,
     marginTop: '3%',
-    left:220,
+    left: 220,
   },
 });
 

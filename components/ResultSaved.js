@@ -21,38 +21,38 @@ class ResultSaved extends React.Component {
     title: 'Course Name', //var need to be changed
   };
 
- toComment() {
+  toComment() {
     const { course_id, url, navigate } = this.props;
     navigate('Comment', {
       course_id: course_id,
       url: url,
     });
   }
-  
+
   render() {
     return (
-  
+
       <ScrollView>
         <Card style={styles.card}>
           <Card.Content>
             <Title>{this.props.title}</Title>
-      
+
             <Paragraph>{this.props.description}</Paragraph>
           </Card.Content>
           <Card.Actions>
-          <Button onPress={() => this.toComment()}>Detail</Button>
+            <Button onPress={() => this.toComment()}>Detail</Button>
           </Card.Actions>
         </Card>
-        
+
       </ScrollView>
-      
+
     );
   }
 }
 
 const styles = StyleSheet.create({
   card: { width: '94%', marginLeft: '3%', marginTop: '3%' },
- 
+
 });
 
 export default ResultSaved;

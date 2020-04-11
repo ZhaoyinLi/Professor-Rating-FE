@@ -7,7 +7,7 @@ import {
   Paragraph,
   IconButton,
 } from 'react-native-paper';
-import { View, StyleSheet, Text, ScrollView, FlatList } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 class ResultItem extends React.Component {
   constructor(props) {
@@ -58,14 +58,6 @@ class ResultItem extends React.Component {
       .catch(err => {
         alert(err);
       });
-
-    navigate('Saved', {
-      id: id,
-      course_id: course_id,
-      url: url,
-      token: token,
-      email: email,
-    });
   }
 
   render() {
@@ -86,7 +78,6 @@ class ResultItem extends React.Component {
           </Card.Content>
           <Card.Actions>
             <Button onPress={() => this.toComment()}>Detail</Button>
-
           </Card.Actions>
         </Card>
       </View>

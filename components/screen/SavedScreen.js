@@ -1,13 +1,6 @@
 import * as React from 'react';
-import {
-  Avatar,
-  Button,
-  Card,
-  Title,
-  Paragraph,
-  List,
-} from 'react-native-paper';
-import { View, StyleSheet, Text, ScrollView, FlatList } from 'react-native';
+import { ActivityIndicator } from 'react-native-paper';
+import { View, FlatList } from 'react-native';
 import ResultItem from '../ResultSaved.js';
 
 
@@ -15,11 +8,12 @@ class SavedScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      url: '',
+      url: 'http://172.220.7.76:8080',
       courses: '',
       search: '',
       terms: [],
-      fav:[],
+      fav: [],
+      visible: true,
     };
   }
 
@@ -27,11 +21,9 @@ class SavedScreen extends React.Component {
     title: 'Saved Courses',
   };
 
-
-
- componentDidMount() {
-    const { url, course_id,token,email, id } = this.props.navigation.state.params;
-    fetch(url + '/v1/users/email/'+email, {
+  componentDidMount() {
+    const { url, email } = this.props.navigation.state.params;
+    fetch(url + '/v1/users/email/' + email, {
       method: 'GET',
       mode: 'cors',
       headers: {
@@ -45,9 +37,8 @@ class SavedScreen extends React.Component {
       .then(result => {
         if (result.success === true) {
           // let terms = result.data;
-          let terms =result.data.favorite; 
-          this.setState({ terms: terms });
-
+          let terms = result.data.favorite;
+          this.setState({ terms: terms, visible: false });
         }
       })
       .catch(err => {
@@ -55,27 +46,30 @@ class SavedScreen extends React.Component {
       });
   }
 
-
-
   render() {
     return (
       <View>
-      <FlatList
-        data={this.state.terms}
-        renderItem={({ item }) => (
-          <ResultItem
-            title={item.name}
-            course_id={item.id}
-            description={item.description}
-            navigate={this.props.navigation.navigate}
-            token={this.state.token}
-            url={this.state.url}
-            email={this.state.email}
-            id={this.state.id}
-          />
-        )}
-        keyExtractor={item => item.id}
-      />
+        {this.state.visible && <ActivityIndicator style={{
+          position: "absolute",
+          marginTop: "40%",
+          alignSelf: "center"
+        }} size={60} color="#0000ff" />}
+        <FlatList
+          data={this.state.terms}
+          renderItem={({ item }) => (
+            <ResultItem
+              title={item.name}
+              course_id={item.id}
+              description={item.description}
+              navigate={this.props.navigation.navigate}
+              token={this.state.token}
+              url={this.state.url}
+              email={this.state.email}
+              id={this.state.id}
+            />
+          )}
+          keyExtractor={item => item.id}
+        />
       </View>
     );
   }

@@ -1,13 +1,6 @@
 import * as React from 'react';
-import {
-  Avatar,
-  Button,
-  Card,
-  Title,
-  Paragraph,
-  List,
-} from 'react-native-paper';
-import { View, StyleSheet, Text, ScrollView, FlatList } from 'react-native';
+import { IconButton } from 'react-native-paper';
+import { View, StyleSheet, FlatList, ActivityIndicator, } from 'react-native';
 import ResultItem from '../ResultItem.js';
 
 class SearchResultScreen extends React.Component {
@@ -20,14 +13,28 @@ class SearchResultScreen extends React.Component {
       token: '',
       email: '',
       id: '',
+      visible: true,
     };
   }
 
-  static navigationOptions = {
-    title: 'Search Result',
-  };
-
-
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitle: 'Search Result',
+      headerRight: () =>
+        <IconButton
+          icon="account"
+          color="black"
+          size={35}
+          onPress={() => {
+            const { url, email } = navigation.state.params;
+            navigation.navigate('Saved', {
+              url: url,
+              email: email,
+            });
+          }}
+        />,
+    };
+  }
 
   componentDidMount() {
     const { search, url, token, email, id } = this.props.navigation.state.params;
@@ -51,6 +58,7 @@ class SearchResultScreen extends React.Component {
             token: token,
             email: email,
             id: result.data.id,
+            visible: false,
           });
         }
         else {
@@ -60,32 +68,16 @@ class SearchResultScreen extends React.Component {
       .catch(err => {
         alert(err);
       });
-
-  }
-
-  saved() {
-    const { navigate, token, id } = this.props.navigation;
-    navigate('Saved', {
-      url: this.state.url,
-      courses: this.state.courses,
-      search: this.state.search,
-      token: this.state.token,
-      email: this.state.email,
-      id: this.state.id,
-    });
   }
 
   render() {
     return (
       <View>
-        <Button
-          mode="contained"
-          style={styles.btn}
-          onPress={() => {
-            this.saved();
-          }}>
-          Saved Page
-          </Button>
+        {this.state.visible && <ActivityIndicator style={{
+          position: "absolute",
+          marginTop: "40%",
+          alignSelf: "center"
+        }} size={60} color="#0000ff" />}
         <FlatList
           data={this.state.courses}
           renderItem={({ item }) => (
@@ -108,11 +100,7 @@ class SearchResultScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  btn: {
-    width: 130,
-    marginTop: '3%',
-    left: 220,
-  },
+
 });
 
 export default SearchResultScreen;

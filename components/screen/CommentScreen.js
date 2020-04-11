@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, Text } from 'react-native';
-import { Button } from 'react-native-paper';
+import { View, FlatList, Text } from 'react-native';
+import { Button, ActivityIndicator } from 'react-native-paper';
 import Comment from '../CommentItem.js';
 
 class CommentScreen extends React.Component {
@@ -10,6 +10,7 @@ class CommentScreen extends React.Component {
       comments: [],
       id: '',
       course_name: '',
+      visible: true,
     };
   }
 
@@ -18,11 +19,6 @@ class CommentScreen extends React.Component {
   };
 
   init(cid) {
-    // const {
-    //   url,
-    //   course_id,
-    // } = this.props.navigation.state.params;
-    // alert('Welcome to init(), used course_id:'+cid);
     fetch('http://172.220.7.76:8080' + '/v1/terms/' + cid, {
       //refresh the comments?
       method: 'GET',
@@ -40,14 +36,14 @@ class CommentScreen extends React.Component {
         if (result.success == true) {
           //alert('back suc: '+result.success);
           //alert('back suc:'+JSON.stringify(result.data.comments[result.data.comments.length-1]));
-          this.setState({ comments: result.data.comments });
+          this.setState({ visible: false, comments: result.data.comments });
           // alert('comments: '+JSON.stringify(this.state.comments));
         } else {
-          alert('otherwise: '+result.sucess);
+          alert('otherwise: ' + result.sucess);
         }
       })
       .catch(err => {
-        alert('err: '+err);
+        alert('err: ' + err);
       });
   }
 
@@ -73,95 +69,42 @@ class CommentScreen extends React.Component {
       })
       .then(result => {
         if (result.success === true) {
-          //alert('entered');
-          // let terms = result.data;
-          // let comments = [];
-          // for (let i = 0; i < terms.length; i++) {
-          //   for (let j = 0; j < terms[i].comments.length; j++) {
-          //     comments.push(terms[i].comments[j]);
-          //   }
-          // }
-          this.setState({ 
+          this.setState({
             course_name: result.data.name,
-            comments: result.data.comments
+            comments: result.data.comments,
+            visible: false,
           }); // get name
-          //alert('course_name: '+this.state.course_name);
-          // this.setState({ comments: result.data.comments });
-          // alert('componentDidMounnt: '+JSON.stringify(this.state.comments));
         }
       })
       .catch(err => {
         alert(err);
       });
-    //this.comments = comments;
-    //alert(this.state.comments[0].content);
-    // //alert('commentscr-token: '+token);
-    // fetch(url + 'GET /v1/terms/courseId' + course_id, {
-    // //fetch(url + '/v1/terms/courseId/' + course_id, { //changed to search by term
-    //   method: 'GET',
-    //   mode: 'cors',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     Accept: '*/*',
-    //   },
-    // })
-    //   .then(response => {
-    //     return response.json();
-    //   })
-    //   .then(result => {
-    //     if (result.success === true) {
-    //       let terms = result.data;
-    //       let comments = [];
-    //       for (let i = 0; i < terms.length; i++) {
-    //         for (let j = 0; j < terms[i].comments.length; j++) {
-    //           comments.push(terms[i].comments[j]);
-    //         }
-    //       }
-    //       this.setState({ comments: comments });
-    //     }
-    //   })
-    //   .catch(err => {
-    //     alert(err);
-    //   });
   }
 
   jumpToRate = () => {
-    // not sure about this function
     const { navigate } = this.props.navigation; //?
-    //const { url, token, course_id} = this.props.navigation.state.params; // course_id=term_id?
     const { url, token, course_id } = this.props.navigation.state.params; // course_id=term_id?
-    // TEST
-    // alert('cmtscr before navigate-course_name: '+this.state.course_name);
-    //alert('going to rate page with token: '+token);
     navigate('Rate', {
       url: 'http://172.220.7.76:8080',
       token: token,
       //course_id: course_id,
       id: course_id,
-      refresh: ()=>{this.init.bind(this)}, // this might not be the case
+      refresh: () => { this.init.bind(this) }, // this might not be the case
       course_name: this.state.course_name,
     });
-
-    // if (this.state.search === '') {
-    //   alert('Search is still empty');
-    // } else {
-    //   const { navigate } = this.props.navigation;
-    //   const { url, email, token } = this.props.navigation.state.params;
-    //   navigate('Result', {
-    //     search: this.state.search,
-    //     url: url,
-    //     token: token,
-    //     email: email,
-    //   });
-    // }
   };
 
   render() {
     const { url, token, course_id } = this.props.navigation.state.params; // course_id=term_id?
     return (
       <View style={{ height: '100%' }}>
+        {this.state.visible && <ActivityIndicator style={{
+          position: "absolute",
+          marginTop: "40%",
+          alignSelf: "center"
+        }} size={60} color="#0000ff" />}
         <FlatList
-          contentContainerStyle={{ paddingBottom: '18%'}}
+          contentContainerStyle={{ paddingBottom: '18%' }}
           data={this.state.comments}
           renderItem={({ item }) => (
             <Comment

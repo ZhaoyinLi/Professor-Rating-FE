@@ -17,7 +17,8 @@ class SearchResultScreen extends React.Component {
       url: '',
       courses: '',
       search: '',
-      token:'',
+      token: '',
+      email: '',
       id:'',
     };
   }
@@ -26,9 +27,10 @@ class SearchResultScreen extends React.Component {
     title: 'Search Result',
   };
 
+  
+
   componentDidMount() {
-    const { search, url, token, email, id} = this.props.navigation.state.params;
-    //alert('id 30 : '+id);
+    const { search, url,token, email, id} = this.props.navigation.state.params;
     fetch(url + '/v1/terms/name/'+ search, {
       method: 'GET',
       mode: 'cors',
@@ -48,9 +50,8 @@ class SearchResultScreen extends React.Component {
             url: url,
             token: token,
             email: email,
-            id: this.props.id,
+            id: result.data.id,
           });
-          //alert('id 52 : '+id);
         } 
         else {
           alert('Invalid Search');
@@ -59,42 +60,33 @@ class SearchResultScreen extends React.Component {
       .catch(err => {
         alert(err);
       });
+    
   }
+  
 
-  // componentDidMount() {
-  //   const { search, url,token } = this.props.navigation.state.params;
-  //   //alert('result-token: '+token);
-  //   fetch(url + '/v1/terms/name/' + search, {
-  //   //fetch(url + '/v1/courses/name/' + search, {
-  //     method: '',
-  //     mode: 'cors',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       Accept: '*/*',
-  //     },
-  //   })
-  //     .then(response => {
-  //       return response.json();
-  //     })
-  //     .then(result => {
-  //       if (result.message === 'success') {
-  //         this.setState({
-  //           courses: result.data,
-  //           search: search,
-  //           url: url,
-  //           token:token,
-  //         });
-  //       } else {
-  //         alert('Invalid Search');
-  //       }
-  //     })
-  //     .catch(err => {
-  //       alert(err);
-  //     });
-  // }
+saved() {
+    const { navigate,token,id } = this.props.navigation;
+    navigate('Saved', {
+      url: this.state.url,
+      courses: this.state.courses,
+      search: this.state.search,
+      token: this.state.token,
+      email: this.state.email,
+      id: this.state.id,
+    });
+  }
 
   render() {
     return (
+      <View>
+      <Button
+            mode="contained"
+            style={styles.btn} 
+            onPress={() => {
+            this.saved();
+            }}>
+            Saved Page
+          </Button>
       <FlatList
         data={this.state.courses}
         renderItem={({ item }) => (
@@ -103,15 +95,25 @@ class SearchResultScreen extends React.Component {
             course_id={item.id}
             description={item.description}
             navigate={this.props.navigation.navigate}
-            url={this.state.url}
             token={this.state.token}
-            comments = {item.comments}
+            url={this.state.url}
+            email={this.state.email}
+            id={this.state.id}
           />
         )}
         keyExtractor={item => item.id}
       />
+      </View>
     );
   }
 }
+
+ const styles = StyleSheet.create({
+  btn: {
+    width: 130,
+    marginTop: '3%',
+    left:220,
+  },
+});
 
 export default SearchResultScreen;

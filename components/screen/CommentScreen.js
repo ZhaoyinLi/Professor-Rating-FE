@@ -8,7 +8,7 @@ class CommentScreen extends React.Component {
     super(props);
     this.state = {
       comments: [],
-      id: this.props.navigation.state.params.course_id,
+      id: '',
       course_name: '',
     };
   }
@@ -22,7 +22,7 @@ class CommentScreen extends React.Component {
     //   url,
     //   course_id,
     // } = this.props.navigation.state.params;
-    alert('Welcome to init(), used course_id:'+cid);
+    // alert('Welcome to init(), used course_id:'+cid);
     fetch('http://172.220.7.76:8080' + '/v1/terms/' + cid, {
       //refresh the comments?
       method: 'GET',
@@ -36,11 +36,12 @@ class CommentScreen extends React.Component {
         return response.json();
       })
       .then(result => {
-        //alert('GET after back to cmtscr: '+result.success);
+        // alert('GET after back to cmtscr: '+result.success);
         if (result.success == true) {
           //alert('back suc: '+result.success);
           //alert('back suc:'+JSON.stringify(result.data.comments[result.data.comments.length-1]));
           this.setState({ comments: result.data.comments });
+          // alert('comments: '+JSON.stringify(this.state.comments));
         } else {
           alert('otherwise: '+result.sucess);
         }
@@ -58,7 +59,7 @@ class CommentScreen extends React.Component {
       token,
       comments,
     } = this.props.navigation.state.params;
-    alert('cmdscr-id: ' + course_id); // it's actually term_id
+    // alert('cmdscr-id: ' + course_id); // it's actually term_id
     fetch(url + '/v1/terms/' + course_id, {
       method: 'GET',
       mode: 'cors',
@@ -72,6 +73,7 @@ class CommentScreen extends React.Component {
       })
       .then(result => {
         if (result.success === true) {
+          //alert('entered');
           // let terms = result.data;
           // let comments = [];
           // for (let i = 0; i < terms.length; i++) {
@@ -79,9 +81,13 @@ class CommentScreen extends React.Component {
           //     comments.push(terms[i].comments[j]);
           //   }
           // }
-          this.setState({ course_name: result.data.name }); // get name
+          this.setState({ 
+            course_name: result.data.name,
+            comments: result.data.comments
+          }); // get name
           //alert('course_name: '+this.state.course_name);
-          this.setState({ comments: result.data.comments });
+          // this.setState({ comments: result.data.comments });
+          // alert('componentDidMounnt: '+JSON.stringify(this.state.comments));
         }
       })
       .catch(err => {
@@ -125,7 +131,7 @@ class CommentScreen extends React.Component {
     //const { url, token, course_id} = this.props.navigation.state.params; // course_id=term_id?
     const { url, token, course_id } = this.props.navigation.state.params; // course_id=term_id?
     // TEST
-    alert('cmtscr before navigate-course_name: '+this.state.course_name);
+    // alert('cmtscr before navigate-course_name: '+this.state.course_name);
     //alert('going to rate page with token: '+token);
     navigate('Rate', {
       url: 'http://172.220.7.76:8080',
@@ -151,10 +157,12 @@ class CommentScreen extends React.Component {
   };
 
   render() {
+    const { url, token, course_id } = this.props.navigation.state.params; // course_id=term_id?
     return (
       <View style={{ height: '100%' }}>
         <FlatList
-          data={this.props.navigation.state.params.comments}
+          contentContainerStyle={{ paddingBottom: '18%'}}
+          data={this.state.comments}
           renderItem={({ item }) => (
             <Comment
               date={item.lastModifiedDate}
@@ -171,7 +179,14 @@ class CommentScreen extends React.Component {
             bottom: '3%',
             left: '10%',
           }}
-          onPress={() => this.jumpToRate()}
+          onPress={() => this.props.navigation.navigate('Rate', {
+            onNavigateBack: this.init.bind(this),
+            url: 'http://172.220.7.76:8080',
+            token: token,
+            id: course_id,
+            course_name: this.state.course_name,
+          })}
+          // onPress={() => this.jumpToRate()}
           mode="contained">
           ADD COMMENT
         </Button>

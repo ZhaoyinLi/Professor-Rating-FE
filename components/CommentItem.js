@@ -32,9 +32,10 @@ export default class Comment extends React.Component {
           </Text>
           <View style={{ position: 'absolute', right: -5 }}>
             <Rating
-              defaultRating={this.props.rating}
+              startingValue={this.props.rate}
               ratingCount={5}
               imageSize={18}
+              readonly={true}
             />
           </View>
         </View>

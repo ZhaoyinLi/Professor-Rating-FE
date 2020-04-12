@@ -1,10 +1,10 @@
 {
   "expoServerPort": 19000,
   "packagerPort": 19001,
-  "packagerPid": 15612,
+  "packagerPid": 7136,
   "expoServerNgrokUrl": "https://jy-ypm.aa5330593.professor-rating-app.exp.direct",
   "packagerNgrokUrl": "https://packager.jy-ypm.aa5330593.professor-rating-app.exp.direct",
-  "ngrokPid": 15832,
+  "ngrokPid": 13100,
   "webpackServerPort": null,
   "devToolsPort": 19002
 }

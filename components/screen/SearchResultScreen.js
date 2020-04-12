@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { IconButton } from 'react-native-paper';
-import { View, StyleSheet, FlatList, ActivityIndicator, } from 'react-native';
+import { IconButton, Button } from 'react-native-paper';
+import { View, Text, FlatList, ActivityIndicator, } from 'react-native';
 import ResultItem from '../ResultItem.js';
 
 class SearchResultScreen extends React.Component {
@@ -8,12 +8,13 @@ class SearchResultScreen extends React.Component {
     super(props);
     this.state = {
       url: '',
-      courses: '',
+      courses: null,
       search: '',
       token: '',
       email: '',
       id: '',
       visible: true,
+      notfound: false,
     };
   }
 
@@ -51,15 +52,19 @@ class SearchResultScreen extends React.Component {
       })
       .then(result => {
         if (result.message === 'success') {
-          this.setState({
-            courses: result.data,
-            search: search,
-            url: url,
-            token: token,
-            email: email,
-            id: result.data.id,
-            visible: false,
-          });
+          if (result.data.length !== 0) {
+            this.setState({
+              courses: result.data,
+              search: search,
+              url: url,
+              token: token,
+              email: email,
+              id: result.data.id,
+              visible: false,
+            });
+          } else {
+            this.setState({ visible: false, notFound: true })
+          }
         }
         else {
           alert('Invalid Search');
@@ -78,6 +83,16 @@ class SearchResultScreen extends React.Component {
           marginTop: "40%",
           alignSelf: "center"
         }} size={60} color="#0000ff" />}
+        {this.state.notFound &&
+          <View style={{ alignItems: "center" }}>
+            <Text style={{ fontSize: 18, color: "grey", marginTop: "45%", fontWeight: "bold" }}>
+              Whoops, courses not found : (
+            </Text>
+            <Button
+              style={{ fontSize: 23 }}
+            >Try Again</Button>
+          </View>
+        }
         <FlatList
           data={this.state.courses}
           renderItem={({ item }) => (
@@ -98,9 +113,5 @@ class SearchResultScreen extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-
-});
 
 export default SearchResultScreen;

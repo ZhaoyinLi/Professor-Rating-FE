@@ -32,7 +32,7 @@ class CommentScreen extends React.Component {
       })
       .then(result => {
         if (result.success == true) {
-          this.setState({ visible: false, comments: result.data.comments });
+          this.setState({ visible: false, comments: result.data.comments.reverse() });
         } else {
           alert('otherwise: ' + result.sucess);
         }
@@ -62,7 +62,7 @@ class CommentScreen extends React.Component {
         if (result.success === true) {
           this.setState({
             course_name: result.data.name,
-            comments: result.data.comments,
+            comments: result.data.comments.reverse(),
             visible: false,
           });
         }

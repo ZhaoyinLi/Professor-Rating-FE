@@ -1,14 +1,13 @@
 import * as React from 'react';
 
 import {
-  Avatar,
   Button,
   Card,
   Title,
   Paragraph,
-  List,
+  IconButton,
 } from 'react-native-paper';
-import { View, StyleSheet, Text, ScrollView, FlatList } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 class ResultItem extends React.Component {
   constructor(props) {
@@ -17,11 +16,11 @@ class ResultItem extends React.Component {
   }
 
   static navigationOptions = {
-    title: 'Course Name', //var need to be changed
+    title: 'Course Name', 
   };
 
   toComment() {
-    const { course_id, url, navigate, token, comments} = this.props;
+    const { course_id, url, navigate, token, comments } = this.props;
     navigate('Comment', {
       course_id: course_id,
       url: url,
@@ -41,7 +40,7 @@ class ResultItem extends React.Component {
         token: token,
       },
       body: JSON.stringify({
-        id:this.props.course_id,
+        id: this.props.course_id,
       })
     })
       .then(response => {
@@ -50,7 +49,6 @@ class ResultItem extends React.Component {
       .then(result => {
         if (result.success === true) {
           const terms = result.data;
-          const token = terms.token;
           alert("You have added " + terms.name + " to your favorite list.");
         } else {
           alert("You have already added this course to your favorite list.");
@@ -59,31 +57,29 @@ class ResultItem extends React.Component {
       .catch(err => {
         alert(err);
       });
-
-     navigate('Saved', {
-      id:id,
-      course_id: course_id,
-      url: url,
-      token:token,
-      email:email,
-    });
   }
 
   render() {
     return (
-      <ScrollView>
+      <View>
         <Card style={styles.card}>
           <Card.Content>
             <Title>{this.props.title}</Title>
-
             <Paragraph>{this.props.description}</Paragraph>
+            <View style={{ position: "absolute", right: 3, top: 0 }}>
+              <IconButton
+                icon="heart-circle"
+                color="#4630EB"
+                size={30}
+                onPress={() => this.toSaved()}
+              />
+            </View>
           </Card.Content>
           <Card.Actions>
             <Button onPress={() => this.toComment()}>Detail</Button>
-            <Button onPress={() => this.toSaved()}>Saved</Button>
           </Card.Actions>
         </Card>
-      </ScrollView>
+      </View>
     );
   }
 }

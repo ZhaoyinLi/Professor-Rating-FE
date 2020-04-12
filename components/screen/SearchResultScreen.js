@@ -1,13 +1,6 @@
 import * as React from 'react';
-import {
-  Avatar,
-  Button,
-  Card,
-  Title,
-  Paragraph,
-  List,
-} from 'react-native-paper';
-import { View, StyleSheet, Text, ScrollView, FlatList } from 'react-native';
+import { IconButton } from 'react-native-paper';
+import { View, StyleSheet, FlatList, ActivityIndicator, } from 'react-native';
 import ResultItem from '../ResultItem.js';
 
 class SearchResultScreen extends React.Component {
@@ -19,19 +12,33 @@ class SearchResultScreen extends React.Component {
       search: '',
       token: '',
       email: '',
-      id:'',
+      id: '',
+      visible: true,
     };
   }
 
-  static navigationOptions = {
-    title: 'Search Result',
-  };
-
-  
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitle: 'Search Result',
+      headerRight: () =>
+        <IconButton
+          icon="account"
+          color="black"
+          size={35}
+          onPress={() => {
+            const { url, email } = navigation.state.params;
+            navigation.navigate('Saved', {
+              url: url,
+              email: email,
+            });
+          }}
+        />,
+    };
+  }
 
   componentDidMount() {
-    const { search, url,token, email, id} = this.props.navigation.state.params;
-    fetch(url + '/v1/terms/name/'+ search, {
+    const { search, url, token, email, id } = this.props.navigation.state.params;
+    fetch(url + '/v1/terms/name/' + search, {
       method: 'GET',
       mode: 'cors',
       headers: {
@@ -51,8 +58,9 @@ class SearchResultScreen extends React.Component {
             token: token,
             email: email,
             id: result.data.id,
+            visible: false,
           });
-        } 
+        }
         else {
           alert('Invalid Search');
         }
@@ -60,60 +68,39 @@ class SearchResultScreen extends React.Component {
       .catch(err => {
         alert(err);
       });
-    
-  }
-  
-
-saved() {
-    const { navigate,token,id } = this.props.navigation;
-    navigate('Saved', {
-      url: this.state.url,
-      courses: this.state.courses,
-      search: this.state.search,
-      token: this.state.token,
-      email: this.state.email,
-      id: this.state.id,
-    });
   }
 
   render() {
     return (
       <View>
-      <Button
-            mode="contained"
-            style={styles.btn} 
-            onPress={() => {
-            this.saved();
-            }}>
-            Saved Page
-          </Button>
-      <FlatList
-        data={this.state.courses}
-        renderItem={({ item }) => (
-          <ResultItem
-            title={item.name}
-            course_id={item.id}
-            description={item.description}
-            navigate={this.props.navigation.navigate}
-            token={this.state.token}
-            url={this.state.url}
-            email={this.state.email}
-            id={this.state.id}
-          />
-        )}
-        keyExtractor={item => item.id}
-      />
+        {this.state.visible && <ActivityIndicator style={{
+          position: "absolute",
+          marginTop: "40%",
+          alignSelf: "center"
+        }} size={60} color="#0000ff" />}
+        <FlatList
+          data={this.state.courses}
+          renderItem={({ item }) => (
+            <ResultItem
+              title={item.name}
+              course_id={item.id}
+              description={item.description}
+              navigate={this.props.navigation.navigate}
+              token={this.state.token}
+              url={this.state.url}
+              email={this.state.email}
+              id={this.state.id}
+            />
+          )}
+          keyExtractor={item => item.id}
+        />
       </View>
     );
   }
 }
 
- const styles = StyleSheet.create({
-  btn: {
-    width: 130,
-    marginTop: '3%',
-    left:220,
-  },
+const styles = StyleSheet.create({
+
 });
 
 export default SearchResultScreen;

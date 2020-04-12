@@ -16,7 +16,7 @@ class ResultItem extends React.Component {
   }
 
   static navigationOptions = {
-    title: 'Course Name', //var need to be changed
+    title: 'Course Name', 
   };
 
   toComment() {
@@ -49,7 +49,6 @@ class ResultItem extends React.Component {
       .then(result => {
         if (result.success === true) {
           const terms = result.data;
-          const token = terms.token;
           alert("You have added " + terms.name + " to your favorite list.");
         } else {
           alert("You have already added this course to your favorite list.");

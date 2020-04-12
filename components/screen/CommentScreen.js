@@ -20,7 +20,6 @@ class CommentScreen extends React.Component {
 
   init(cid) {
     fetch('http://172.220.7.76:8080' + '/v1/terms/' + cid, {
-      //refresh the comments?
       method: 'GET',
       mode: 'cors',
       headers: {
@@ -32,12 +31,8 @@ class CommentScreen extends React.Component {
         return response.json();
       })
       .then(result => {
-        // alert('GET after back to cmtscr: '+result.success);
         if (result.success == true) {
-          //alert('back suc: '+result.success);
-          //alert('back suc:'+JSON.stringify(result.data.comments[result.data.comments.length-1]));
           this.setState({ visible: false, comments: result.data.comments });
-          // alert('comments: '+JSON.stringify(this.state.comments));
         } else {
           alert('otherwise: ' + result.sucess);
         }
@@ -48,14 +43,10 @@ class CommentScreen extends React.Component {
   }
 
   componentDidMount() {
-    //const { url, course_id, token, comments } = this.props.navigation.state.params;
     const {
       url,
       course_id,
-      token,
-      comments,
     } = this.props.navigation.state.params;
-    // alert('cmdscr-id: ' + course_id); // it's actually term_id
     fetch(url + '/v1/terms/' + course_id, {
       method: 'GET',
       mode: 'cors',
@@ -73,7 +64,7 @@ class CommentScreen extends React.Component {
             course_name: result.data.name,
             comments: result.data.comments,
             visible: false,
-          }); // get name
+          });
         }
       })
       .catch(err => {
@@ -82,20 +73,19 @@ class CommentScreen extends React.Component {
   }
 
   jumpToRate = () => {
-    const { navigate } = this.props.navigation; //?
-    const { url, token, course_id } = this.props.navigation.state.params; // course_id=term_id?
+    const { navigate } = this.props.navigation;
+    const { token, course_id } = this.props.navigation.state.params;
     navigate('Rate', {
       url: 'http://172.220.7.76:8080',
       token: token,
-      //course_id: course_id,
       id: course_id,
-      refresh: () => { this.init.bind(this) }, // this might not be the case
+      refresh: () => { this.init.bind(this) },
       course_name: this.state.course_name,
     });
   };
 
   render() {
-    const { url, token, course_id } = this.props.navigation.state.params; // course_id=term_id?
+    const { url, token, course_id } = this.props.navigation.state.params;
     return (
       <View style={{ height: '100%' }}>
         {this.state.visible && <ActivityIndicator style={{
@@ -129,7 +119,6 @@ class CommentScreen extends React.Component {
             id: course_id,
             course_name: this.state.course_name,
           })}
-          // onPress={() => this.jumpToRate()}
           mode="contained">
           ADD COMMENT
         </Button>

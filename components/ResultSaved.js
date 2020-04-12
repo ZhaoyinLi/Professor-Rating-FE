@@ -18,7 +18,7 @@ class ResultSaved extends React.Component {
   }
 
   static navigationOptions = {
-    title: 'Course Name', //var need to be changed
+    title: 'Course Name',
   };
 
   toComment() {

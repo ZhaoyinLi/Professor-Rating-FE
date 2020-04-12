@@ -90,6 +90,7 @@ class SearchResultScreen extends React.Component {
             </Text>
             <Button
               style={{ fontSize: 23 }}
+              onPress={() => { this.props.navigation.goBack(); }}
             >Try Again</Button>
           </View>
         }

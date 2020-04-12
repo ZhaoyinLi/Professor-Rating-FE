@@ -6,6 +6,7 @@ import {
   Title,
   Paragraph,
   IconButton,
+  Text,
 } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
 
@@ -16,21 +17,22 @@ class ResultItem extends React.Component {
   }
 
   static navigationOptions = {
-    title: 'Course Name', 
+    title: 'Course Name',
   };
 
   toComment() {
-    const { course_id, url, navigate, token, comments } = this.props;
+    const { course_id, url, year, season, navigate, token, comments, title } = this.props;
     navigate('Comment', {
       course_id: course_id,
       url: url,
       token: token,
       comments: comments,
+      header: title + " (" + season + "," + year + ")",
     });
   }
 
   toSaved() {
-    const { course_id, url, navigate, token, email, id } = this.props;
+    const { url, token } = this.props;
     fetch(url + '/v1/terms/favorite', {
       method: 'PUT',
       mode: 'cors',
@@ -65,7 +67,8 @@ class ResultItem extends React.Component {
         <Card style={styles.card}>
           <Card.Content>
             <Title>{this.props.title}</Title>
-            <Paragraph>{this.props.description}</Paragraph>
+            <Text style={{ fontSize: 11, color: "grey" }}>{this.props.season + ", " + this.props.year}</Text>
+            <Paragraph style={{ marginTop: 15 }}>{this.props.description}</Paragraph>
             <View style={{ position: "absolute", right: 3, top: 0 }}>
               <IconButton
                 icon="heart-circle"

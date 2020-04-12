@@ -14,8 +14,10 @@ class CommentScreen extends React.Component {
     };
   }
 
-  static navigationOptions = {
-    title: 'Comments',
+  static navigationOptions = ({ navigation }) => {
+    return ({
+      headerTitle: navigation.state.params.header,
+    })
   };
 
   init(cid) {
@@ -32,7 +34,8 @@ class CommentScreen extends React.Component {
       })
       .then(result => {
         if (result.success == true) {
-          this.setState({ visible: false, comments: result.data.comments.reverse() });
+          const title = this.props.navigation.state.params;
+          this.setState({ visible: false, comments: result.data.comments.reverse(), title: title });
         } else {
           alert('otherwise: ' + result.sucess);
         }
@@ -46,6 +49,7 @@ class CommentScreen extends React.Component {
     const {
       url,
       course_id,
+      title
     } = this.props.navigation.state.params;
     fetch(url + '/v1/terms/' + course_id, {
       method: 'GET',
@@ -85,7 +89,7 @@ class CommentScreen extends React.Component {
   };
 
   render() {
-    const { url, token, course_id } = this.props.navigation.state.params;
+    const { token, course_id } = this.props.navigation.state.params;
     return (
       <View style={{ height: '100%' }}>
         {this.state.visible && <ActivityIndicator style={{

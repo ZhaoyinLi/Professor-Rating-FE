@@ -100,6 +100,8 @@ class SearchResultScreen extends React.Component {
             <ResultItem
               title={item.name}
               course_id={item.id}
+              season={item.season}
+              year={item.year}
               description={item.description}
               navigate={this.props.navigation.navigate}
               token={this.state.token}
